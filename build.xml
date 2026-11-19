@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="PROG5121_PoE_Part3" default="test" basedir=".">
+    <property name="src.dir" location="src"/>
+    <property name="test.src.dir" location="test"/>
+    <property name="lib.dir" location="lib"/>
+    <property name="build.dir" location="build"/>
+    <property name="classes.dir" location="${build.dir}/classes"/>
+    <property name="test.classes.dir" location="${build.dir}/test-classes"/>
+    <property name="test.reports.dir" location="${build.dir}/test-reports"/>
+    <property name="dist.dir" location="dist"/>
+    <property name="jar.file" location="${dist.dir}/QuickChatPart3.jar"/>
+
+    <path id="junit.classpath">
+        <fileset dir="${lib.dir}" includes="*.jar" erroronmissingdir="false"/>
+    </path>
+
+    <path id="test.classpath">
+        <path refid="junit.classpath"/>
+        <pathelement location="${classes.dir}"/>
+        <pathelement location="${test.classes.dir}"/>
+    </path>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}"
+               destdir="${classes.dir}"
+               includeantruntime="false"
+               source="17"
+               target="17">
+            <classpath refid="junit.classpath"/>
+        </javac>
+    </target>
+
+    <target name="compile-test" depends="compile">
+        <mkdir dir="${test.classes.dir}"/>
+        <javac srcdir="${test.src.dir}"
+               destdir="${test.classes.dir}"
+               includeantruntime="false"
+               source="17"
+               target="17">
+            <classpath refid="test.classpath"/>
+        </javac>
+    </target>
+
+    <target name="test" depends="compile-test">
+        <mkdir dir="${test.reports.dir}"/>
+        <junit printsummary="yes" haltonfailure="yes" fork="true">
+            <classpath refid="test.classpath"/>
+            <formatter type="plain"/>
+            <batchtest todir="${test.reports.dir}">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/*Test.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir="${dist.dir}"/>
+        <jar destfile="${jar.file}" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="quickchat.QuickChatApp"/>
+            </manifest>
+        </jar>
+    </target>
+</project>

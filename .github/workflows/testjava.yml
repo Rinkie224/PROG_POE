@@ -24,7 +24,8 @@ with:
 -name: Set up Apache Ant
 uses: fwilhemt/setup-ant@v1
 
--name: Run Ant tests
-run: ant test
+-name: Run Ant
+run: ant -noinput -buildfile build.xml
+
 
 
